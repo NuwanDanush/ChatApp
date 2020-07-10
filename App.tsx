@@ -1,13 +1,15 @@
 import { StatusBar } from 'expo-status-bar';
 import React from 'react';
+import {SafeAreaProvider} from 'react-native-safe-area-context';
 import { StyleSheet, Text, View } from 'react-native';
-import { Container, Header } from "native-base";
+import Navigator from './src/navigation';
+import Colours from './src/constants/Colours';
 export default function App() {
   return (
-    <View style={styles.container}>
-      <Text>Open up App.tsx to start working on your app!</Text>
-      <StatusBar style="auto" />
-    </View>
+    <SafeAreaProvider>
+      <Navigator/>
+      <StatusBar backgroundColor={Colours.LIGHTGRAY}/>
+    </SafeAreaProvider>
   );
 }
 
