@@ -17,16 +17,16 @@ type props = {
 }
 
 
-const Register = ({ route, navigation }: props)=> {
+const Register = ({ route, navigation }: props) => {
 
   const [value, onChangeText] = React.useState('');
   return (
     <Container style={{ backgroundColor: Colours.WHITE }}>
       <Content style={{ backgroundColor: Colours.WHITE }}>
         <Grid>
-          <Row style={{ flex: 1, height: Layout.window.height, justifyContent: 'center', alignItems: 'center', backgroundColor: Colours.GRAY }}>
+          <Row style={{ flex: 1, height: Layout.window.height, justifyContent: 'center', alignItems: 'center', backgroundColor: Colours.WHITE }}>
             <Form style={{ flex: 1, paddingHorizontal: 25 }}>
-              <Text style={{ fontSize: 45, fontWeight: "bold", alignItems: 'center', justifyContent: 'center' }}>Register</Text>
+              <Text style={{ fontSize: 45, fontWeight: "bold", alignItems: 'center', justifyContent: 'center', textAlign: 'center' }}>Register</Text>
               <Item rounded style={{ borderColor: Colours.BLACK, marginBottom: 20, marginTop: 20 }}>
                 <Input placeholder="FirstName" />
               </Item>
@@ -43,10 +43,11 @@ const Register = ({ route, navigation }: props)=> {
                 <Input placeholder="Confirm Password" />
               </Item>
               <Button rounded style={{ marginHorizontal: 85, alignItems: 'center', justifyContent: 'center', borderColor: Colours.BLACK, marginBottom: 20, marginTop: 20, backgroundColor: Colours.BLACK }}>
-                <Text style={{ color: Colours.WHITE }}>LOGIN</Text>
+                <Text style={{ color: Colours.WHITE }}>REGISTER</Text>
               </Button>
-              <Text>Already have an account?</Text>
-              <Item onPress={() => { navigator.push(Login) }}>
+
+              <Item onPress={() => { navigation.push('Login') }}>
+                <Text style={{ justifyContent: 'center', alignItems: 'center', marginLeft:75 }}>Already have an account?</Text>
                 <Text style={{ color: Colours.PRIMARYCOLOR }}>Login now</Text>
               </Item>
             </Form>

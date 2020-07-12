@@ -42,7 +42,7 @@ const Login = ({ route, navigation }: props) => {
           <Row style={{ marginVertical:30, flex: 1, justifyContent: 'center', alignItems: 'center' }}>
             <Text>Don't have an account?</Text>
             <Item onPress= {()=>{navigation.push('Register')}}>
-              <Text style={{color:Colours.PRIMARYCOLOR}}>Login now</Text>
+              <Text style={{color:Colours.PRIMARYCOLOR}}>Register now</Text>
             </Item>
           </Row>
         </Grid>
