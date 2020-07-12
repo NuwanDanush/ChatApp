@@ -24,7 +24,7 @@ const Login = ({ route, navigation }: props) => {
       <Content style={{ backgroundColor: Colours.WHITE}}>
         <Grid>
           <Row style={{ flex: 1, justifyContent: 'center', alignItems: 'center', height: 300, backgroundColor: Colours.WHITE }}>
-            <Text style={{fontSize:45, fontWeight:"bold"}}>ChatApp</Text>
+            <Text style={{fontSize:45, fontWeight:"bold"}}>Login</Text>
           </Row>
           <Row style={{ justifyContent: 'center', alignItems: 'center', height: 300 }}>
             <Form style={{ flex: 1, paddingHorizontal: 25 }}>
@@ -42,7 +42,7 @@ const Login = ({ route, navigation }: props) => {
           <Row style={{ marginVertical:30, flex: 1, justifyContent: 'center', alignItems: 'center' }}>
             <Text>Don't have an account?</Text>
             <Item onPress= {()=>{navigation.push('Register')}}>
-              <Text style={{color:Colours.PRIMARYCOLOR}}>Register now</Text>
+              <Text style={{color:Colours.PRIMARYCOLOR}}>Login now</Text>
             </Item>
           </Row>
         </Grid>
