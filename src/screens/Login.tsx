@@ -24,7 +24,7 @@ const Login = ({ route, navigation }: props) => {
       <Content style={{ backgroundColor: Colours.WHITE}}>
         <Grid>
           <Row style={{ flex: 1, justifyContent: 'center', alignItems: 'center', height: 300, backgroundColor: Colours.WHITE }}>
-            <Text></Text>
+            <Text style={{fontSize:45, fontWeight:"bold"}}>ChatApp</Text>
           </Row>
           <Row style={{ justifyContent: 'center', alignItems: 'center', height: 300 }}>
             <Form style={{ flex: 1, paddingHorizontal: 25 }}>
