@@ -4,11 +4,17 @@ import * as React from 'react';
 import { AuthParamList } from '../types';
 import Login from '../screens/Login';
 import Register from '../screens/Registration';
+import BottomTabNavigator from './bottomTabNavigator';
 
 export default function Navigator() {
+    const [authToken,setToken] = React.useState('')
     return (
         <NavigationContainer>
-            <AuthNavigator />
+            {authToken?
+                <BottomTabNavigator/>
+                :
+                <AuthNavigator/>
+            }
         </NavigationContainer>
     );
 }
