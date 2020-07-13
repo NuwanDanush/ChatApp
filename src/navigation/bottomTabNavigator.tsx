@@ -5,7 +5,7 @@ import {createStackNavigator} from '@react-navigation/stack';
 import { BottomTabParamList, TabOneParamList, TabTwoParamList } from '../types';
 import Chat from '../screens/Chat';
 import Profile from '../screens/Profile';
-import Color from '../constants/Color';
+import Color from '../constants/Colours';
 
 const BottomTab = createBottomTabNavigator<BottomTabParamList>();
 
