@@ -7,7 +7,7 @@ import Register from '../screens/Registration';
 import BottomTabNavigator from './bottomTabNavigator';
 
 export default function Navigator() {
-    const [authToken,setToken] = React.useState('bb')
+    const [authToken,setToken] = React.useState('')
     return (
         <NavigationContainer>
             {authToken?
