@@ -37,7 +37,7 @@ const TabOneStack = createStackNavigator<TabOneParamList>();
 function TabOne(){
     return(
         <TabOneStack.Navigator >
-            <TabOneStack.Screen options={{headerTitleContainerStyle:{backgroundColor:Colors.BLACK, fontStyle: 'bolt',}}} name='Chat'  component={Chat}/>
+            <TabOneStack.Screen options={{headerTitleContainerStyle:{backgroundColor:Colors.BLACK,}}} name='Chat'  component={Chat}/>
         </TabOneStack.Navigator>
     );
 }
