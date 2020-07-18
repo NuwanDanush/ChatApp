@@ -7,7 +7,7 @@ import { StackNavigationProp } from '@react-navigation/stack';
 import { AuthParamList } from '../types';
 import { RouteProp } from '@react-navigation/native';
 import Login from './Login';
-import * as firebase from 'firebase';
+ import * as firebase from 'firebase';
 
 type RegisterProps = RouteProp<AuthParamList, 'Register'>;
 type RegisterNavigationProps = StackNavigationProp<AuthParamList, 'Register'>;

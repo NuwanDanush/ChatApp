@@ -4,7 +4,17 @@ import {SafeAreaProvider} from 'react-native-safe-area-context';
 import { StyleSheet, Text, View } from 'react-native';
 import Navigator from './src/navigation';
 import Colours from './src/constants/Colours';
+import firebaseInit from './src/config/FirebaseConfig';
+
 export default function App() {
+
+  try {
+    console.log('start init firebase')
+    firebaseInit()
+    console.log('firebase init success')
+  } catch (error) {
+    alert(error)
+  }
   return (
     <SafeAreaProvider>
       <Navigator/>
