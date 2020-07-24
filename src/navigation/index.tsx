@@ -5,9 +5,15 @@ import { AuthParamList } from '../types';
 import Login from '../screens/Login';
 import Register from '../screens/Registration';
 import BottomTabNavigator from './bottomTabNavigator';
+import * as firebase from 'firebase';
 
 export default function Navigator() {
     const [authToken,setToken] = React.useState('')
+    React.useEffect(()=>{
+        firebase.auth().onAuthStateChanged((user)=>{
+            setToken(user?.uid?user?.uid:'')
+        })
+    },[])
     return (
         <NavigationContainer>
             {authToken?
