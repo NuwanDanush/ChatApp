@@ -7,7 +7,9 @@ export type BottomTabParamList={
     TabTwo:undefined;
 }
 export type TabOneParamList={
-    Chat:undefined;
+    ChatList:undefined;
+    ChatView:{chatId?:string|null, title:string};
+    AddChat:undefined;
 }
 export type TabTwoParamList={
     Profile:undefined;
