@@ -5,9 +5,13 @@ import { StyleSheet, Text, View } from 'react-native';
 import Navigator from './src/navigation';
 import Colours from './src/constants/Colours';
 import firebaseInit from './src/config/FirebaseConfig';
+import useCachedResources from './src/hooks/useCachedResources';
 
 export default function App() {
-
+  const isLoadingComplete = useCachedResources();
+  if(!isLoadingComplete){
+    return null;
+  }
   try {
     console.log('start init firebase')
     firebaseInit()
