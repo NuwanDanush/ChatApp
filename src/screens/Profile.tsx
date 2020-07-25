@@ -1,7 +1,7 @@
 import * as React from 'react';
 import * as firebase from 'firebase';
 import { View, ImageBackground, StyleSheet } from 'react-native';
-import { Avatar } from 'react-native-elements';
+import { Avatar, colors } from 'react-native-elements';
 import Layout from '../constants/Layout';
 import Color from '../constants/Colours';
 import { Container, Content, Grid, Row, Text, List, ListItem, Left, Button, Icon, Body, Right, Switch } from 'native-base';
@@ -12,14 +12,14 @@ const image = { uri: "https://montanusphotography.com/coverphotos/WiscoyFalls-Ch
 interface ProfileProps { }
 const Profile = (props: ProfileProps) => {
 
-  const logout = () =>{
-    {firebase.auth().signOut().then(function() {
-      console.log('Signed Out');
-    }, function(error) {
-      console.error('Sign Out Error', error);
-    });}
-  }
-  
+  // const logout = () =>{
+  //   {firebase.auth().signOut().then(function() {
+  //     console.log('Signed Out');
+  //   }, function(error) {
+  //     console.error('Sign Out Error', error);
+  //   });}
+  // }
+
   return (
     <Container>
       <Content>
@@ -32,7 +32,7 @@ const Profile = (props: ProfileProps) => {
             </ImageBackground>
           </Row>
           <Row style={{ height: Layout.window.height * 0.05, flex: 1, justifyContent: "center" }}>
-            <Text style={{ fontSize: 25, fontWeight: 'bold' }}>Alice Tall</Text>
+            <Text style={{ fontSize: 25, fontWeight: 'bold' }}>Nuwan Danushka</Text>
 
           </Row>
           <Row style={{ height: Layout.window.height * 0.05, flex: 1, justifyContent: "center" }}>
@@ -45,7 +45,7 @@ const Profile = (props: ProfileProps) => {
                   <Icon active style={{ color: Color.GRAY }} name="ios-person" />
                 </Left>
                 <Body>
-                  <Text style={{ color: Color.BLACK }}>FirstName:Alice</Text>
+                  <Text style={{ color: Color.BLACK }}>FirstName: Nuwan</Text>
                 </Body>
               </ListItem>
               <ListItem icon noBorder style={{ width: Layout.window.width }} noIndent>
@@ -53,7 +53,7 @@ const Profile = (props: ProfileProps) => {
                   <Icon active style={{ color: Color.GRAY }} name="ios-person" />
                 </Left>
                 <Body>
-                  <Text style={{ color: Color.BLACK }}>LastName:Tall</Text>
+                  <Text style={{ color: Color.BLACK }}>LastName: Danushka</Text>
                 </Body>
               </ListItem>
               <ListItem icon noBorder style={{ width: Layout.window.width }} noIndent>
@@ -61,7 +61,7 @@ const Profile = (props: ProfileProps) => {
                   <Icon active style={{ color: Color.GRAY }} name="ios-mail" />
                 </Left>
                 <Body>
-                  <Text style={{ color: Color.BLACK }}>Email:avhfrgh100@gmail.com</Text>
+                  <Text style={{ color: Color.BLACK }}>Email: abc@gmail.com</Text>
                 </Body>
               </ListItem>
               <ListItem icon noBorder style={{ width: Layout.window.width }} noIndent>
@@ -69,22 +69,24 @@ const Profile = (props: ProfileProps) => {
                   <Icon active style={{ color: Color.GRAY }} name="ios-call" />
                 </Left>
                 <Body>
-                  <Text style={{ color: Color.BLACK }}>PhoneNumber:11287000364</Text>
+                  <Text style={{ color: Color.BLACK }}>PhoneNumber: +94779509290</Text>
                 </Body>
               </ListItem>
-
-
+              <View>
+                <Button rounded style={{ marginHorizontal: 85, alignItems: 'center', justifyContent: 'center', borderColor: Color.BLACK, marginBottom: 20, marginTop: 65, backgroundColor:Color.BLACK }}onPress={() => firebase.auth().signOut()}>
+                  <Text>Log out</Text>
+                </Button>
+              </View>
             </List>
           </Row>
           <Row style={{ height: Layout.window.height * 0.2 }} >
 
           </Row>
-          <Button rounded style={{ marginHorizontal: 85, alignItems: 'center', justifyContent: 'center', borderColor:Color.BLACK, marginBottom: 20, marginTop: 20, backgroundColor:Color.BLACK}} onPress={() => logout()}>
-                <Text style={{ color:Color.BLACK }}>LOGIN</Text>
-              </Button>
+
 
 
         </Grid>
+
       </Content>
 
     </Container>
