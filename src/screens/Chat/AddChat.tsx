@@ -8,11 +8,18 @@ import Loading from '../Loading';
 
 interface AddChatProps { }
 
-const AddChat = (props: AddChatProps) =>{
+const AddChat = (props: AddChatProps) => {
     const user = firebase.auth().currentUser;
     const ref = firebase.database();
     const [userList, setUserList] = React.useState<Array<User>>([])
     const [isLoading, setLoading] = React.useState<boolean>(true)
+}
+React.useEffect(() => {
+    loadData()
+}, [])
+
+const loadData = () =>{
+    
 }
 export default AddChat;
 
