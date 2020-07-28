@@ -39,3 +39,8 @@ type UserWithChatId = {
   user:User;
   chatId:string|null|undefined;
 }
+interface ChatListProps {}
+
+const ChatList = (props: Props) => {
+  
+}
