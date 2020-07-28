@@ -56,6 +56,52 @@ const ChatList = (props: Props) => {
   },[])
 
   const loadChats = () =>{
-    
+    setLoading(true);
+    ref.ref("/User/" + user?.uid + "/").on("value", (snapshot) => {
+      setLoading(true);
+      setChats([]);
+      setUser([]);
+      let userData: User = snapshot.val();
+      let chatIds: Array<string | null> | undefined = userData.chats;
+      if (!chatIds) {
+        setLoading(false);
+        return;
+      }
+      let tempChat: Chat;
+      chatIds?.map((value, i) => {
+        ref
+          .ref("/Chat/" + value + "/")
+          .once("value")
+          .then((snapshot) => {
+            tempChat = snapshot.val();
+            tempChat.id = value;
+            setChats((prev) => [...prev, tempChat]);
+            let userArray = tempChat.users?tempChat.users:[]
+
+            let otherUser:string|undefined;
+            if(userArray[0] === user?.uid){
+              otherUser = userArray[1];
+            }
+            else{
+              otherUser = userArray[0];
+            }
+            ref.ref('/User/'+otherUser+'/').once('value')
+            .then((snapshot1)=>{
+              let otherUserData:User = snapshot1.val();
+              let chatUser:UserWithChatId={
+                chatId:value,
+                user:otherUserData,
+              }
+              setUser(prev=>[...prev,chatUser]);
+            })
+
+          })
+          .catch((error) => {
+            setLoading(false);
+            alert(error.message);
+          });
+      });
+      setLoading(false);
+    });
   }
 }
