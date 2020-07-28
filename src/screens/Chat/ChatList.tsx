@@ -155,3 +155,8 @@ const ChatList = (props: Props) => {
     </Container>
   );
 }
+export default ChatList;
+
+const styles = StyleSheet.create({
+  container: {},
+});
