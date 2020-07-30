@@ -39,3 +39,21 @@ type UserWithChatId = {
   user:User;
   chatId:string|null|undefined;
 }
+interface ChatListProps {}
+const ChatList = (props: Props) => {
+  const user = firebase.auth().currentUser;
+  const ref = firebase.database();
+  const [chats, setChats] = React.useState<Array<Chat>>([]);
+  const [userArray, setUser] = React.useState<Array<UserWithChatId>>([])
+  const [isLoading, setLoading] = React.useState<boolean>(true);
+
+  React.useEffect(()=>{
+    loadChats();
+    return()=>{
+      setChats([])
+    }
+  },[])
+
+  const loadChats = () => {
+    
+  }
