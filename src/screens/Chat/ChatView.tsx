@@ -27,3 +27,15 @@ import { TabOneParamList, Chat, User } from "../../types";
 import { StackNavigationProp } from "@react-navigation/stack";
 import * as firebase from "firebase";
 import Loading from "../Loading";
+
+type ChatListRouteProps = RouteProp<TabOneParamList, "ChatList">;
+type ChatListNavigationProps = StackNavigationProp<TabOneParamList, "ChatList">;
+
+type Props = {
+  route: ChatListRouteProps;
+  navigation: ChatListNavigationProps;
+};
+type UserWithChatId = {
+  user:User;
+  chatId:string|null|undefined;
+}
