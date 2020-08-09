@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "chatApp",
-    "slug": "chatApp",
+    "name": "17000203 BWN_Danushka",
+    "slug": "Easy_Chat",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
@@ -21,6 +21,9 @@
     },
     "web": {
       "favicon": "./assets/favicon.png"
+    },
+    "android": {
+      "package": "com.danushka.EasyChat"
     }
   }
 }
