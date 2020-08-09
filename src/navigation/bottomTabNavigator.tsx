@@ -8,6 +8,7 @@ import Profile from '../screens/Profile';
 import Color from '../constants/Colours';
 import { Colors } from 'react-native/Libraries/NewAppScreen';
 import { ChatList, ChatView, AddChat } from '../screens/Chat';
+import { RouteProp } from '@react-navigation/native';
 
 const BottomTab = createBottomTabNavigator<BottomTabParamList>();
 
@@ -46,10 +47,10 @@ function TabOne() {
                     headerTitleContainerStyle: { alignItems: 'center', }
                 }}
             />
-            <TabOneStack.Screen
-                name='ChatView'
-                component={ChatView}
-                options={({ route }) => ({ title: route.params.title })}
+           <TabOneStack.Screen
+             name='ChatView'
+             component={ChatView}
+             options={({route}:RouteProp<TabOneParamList,'ChatView'>)=>({ title: route.params.title })}
             />
             <TabOneStack.Screen
                 name='AddChat'
