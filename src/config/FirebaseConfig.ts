@@ -1,15 +1,16 @@
-import * as firebase from 'firebase';
+import * as firebase from "firebase";
 
 const firebaseConfig = {
-    apiKey: "AIzaSyAUeRSO1TsTQRdOT4hcZCmh0xh1hbGiw30",
-    authDomain: "easychat-20a6c.firebaseapp.com",
-    databaseURL: "https://easychat-20a6c.firebaseio.com",
-    projectId: "easychat-20a6c",
-    storageBucket: "easychat-20a6c.appspot.com",
-    messagingSenderId: "1083661282119",
-    appId: "1:1083661282119:web:fcad4781ccbcab4a457a62"
-  };
+  apiKey: "AIzaSyA7JXWa0V_K7uJut4aauhcSLKCQZMj_JhQ",
+  authDomain: "easychat-36ce3.firebaseapp.com",
+  databaseURL: "https://easychat-36ce3.firebaseio.com",
+  projectId: "easychat-36ce3",
+  storageBucket: "easychat-36ce3.appspot.com",
+  messagingSenderId: "785951627183",
+  appId: "1:785951627183:web:7d5e9c4985f0df0be7015a",
+  measurementId: "G-JES8B85PG5",
+};
 
-export default function firebaseInit(){
-    firebase.initializeApp(firebaseConfig);
+export default function firebaseInit() {
+  firebase.initializeApp(firebaseConfig);
 }

@@ -1,94 +1,332 @@
-import * as React from 'react';
-import * as firebase from 'firebase';
-import { View, ImageBackground, StyleSheet } from 'react-native';
-import { Avatar, colors } from 'react-native-elements';
-import Layout from '../constants/Layout';
-import Color from '../constants/Colours';
-import { Container, Content, Grid, Row, Text, List, ListItem, Left, Button, Icon, Body, Right, Switch } from 'native-base';
-import * as Font from 'expo-font';
-// interfaceimport { Form } from 'native-base';
-//  ProfileProps {}
-const image = { uri: "https://montanusphotography.com/coverphotos/WiscoyFalls-CharlotteNY-MontanusPhoto.jpg" };
-interface ProfileProps { }
-const Profile = (props: ProfileProps) => {
+import * as React from "react";
+import { Avatar, colors } from "react-native-elements";
 
-  // const logout = () =>{
-  //   {firebase.auth().signOut().then(function() {
-  //     console.log('Signed Out');
-  //   }, function(error) {
-  //     console.error('Sign Out Error', error);
-  //   });}
-  // }
+import {
+  Container,
+  Content,
+  Grid,
+  Row,
+  Text,
+  List,
+  ListItem,
+  Left,
+  Button,
+  Icon,
+  Body,
+} from "native-base";
+import Layout from "../constants/Layout";
+import Color from "../constants/Colours";
+import * as ImagePicker from "expo-image-picker";
+import Constants from "expo-constants";
+import * as Permissions from "expo-permissions";
+import { ImageBackground, StyleSheet, View } from "react-native";
+import * as firebase from "firebase";
+import { AuthParamList, TabTwoParamList, User } from "../types";
+import { StackNavigationProp } from "@react-navigation/stack";
+import { RouteProp } from "@react-navigation/native";
+import Loading from "./Loading";
 
+type ProfileRouteProps = RouteProp<TabTwoParamList, "Profile">;
+type ProfileNavigationProps = StackNavigationProp<TabTwoParamList, "Profile">;
+
+type Props = {
+  route: ProfileRouteProps;
+  navigation: ProfileNavigationProps;
+};
+
+interface ProfileProps {}
+
+const Profile = (props: Props) => {
+  const User = firebase.auth().currentUser;
+  const dbRef = firebase.database();
+  const [image, setImage] = React.useState(" ");
+  const [coverImage, setCoverImage] = React.useState(" ");
+  const [isLoading, setLoading] = React.useState(false);
+  const [user, setUser] = React.useState<User>({});
+
+  React.useEffect(() => {
+    getPermissionAsync();
+    const unsubscribe = props.navigation.addListener("focus", () => {
+      getUserData();
+    });
+    return unsubscribe;
+  }, []);
+  const getUserData = async () => {
+    setLoading(true);
+    setUser({});
+    firebase
+      .database()
+      .ref(`User/${User?.uid}`)
+      .once("value", function (snapshot) {
+        console.log(snapshot.val());
+        let temp: User = snapshot.val();
+        setUser(temp);
+        setImage(temp.photoUrl ? temp.photoUrl : " ");
+        setCoverImage(temp.coverPhotoUrl ? temp.coverPhotoUrl : " ");
+        setLoading(false);
+      })
+      .catch((error) => {
+        setLoading(false);
+        alert(error.message);
+      });
+  };
+
+  const getPermissionAsync = async () => {
+    if (Constants.platform?.ios) {
+      const { status } = await Permissions.askAsync(Permissions.CAMERA_ROLL);
+      if (status !== "granted") {
+        alert("Sorry, we need camera roll permissions to make this work!");
+      }
+    }
+  };
+  const _pickImage = async () => {
+    try {
+      let result = await ImagePicker.launchImageLibraryAsync({
+        mediaTypes: ImagePicker.MediaTypeOptions.All,
+        allowsEditing: true,
+        aspect: [4, 3],
+        quality: 1,
+      });
+      if (!result.cancelled) {
+        setImage(result.uri);
+        uploadImageAsync(result.uri);
+      }
+      console.log(result);
+    } catch (E) {
+      console.log(E);
+    }
+  };
+  const _pickCoverImage = async () => {
+    try {
+      let result = await ImagePicker.launchImageLibraryAsync({
+        mediaTypes: ImagePicker.MediaTypeOptions.All,
+        allowsEditing: true,
+        aspect: [4, 3],
+        quality: 1,
+      });
+      if (!result.cancelled) {
+        setCoverImage(result.uri);
+        uploadCoverImageAsync(result.uri);
+      }
+      console.log(result);
+    } catch (E) {
+      console.log(E);
+    }
+  };
+  const uploadImageAsync = async (img: string) => {
+    setLoading(true);
+    const blob: Blob = await new Promise((resolve, reject) => {
+      const xhr = new XMLHttpRequest();
+      xhr.onload = function () {
+        resolve(xhr.response);
+      };
+      xhr.onerror = function (e) {
+        console.log(e);
+        reject(new TypeError("Network request failed"));
+        setLoading(false);
+        props.navigation.pop();
+      };
+      xhr.responseType = "blob";
+      xhr.open("GET", img, true);
+      xhr.send(null);
+    });
+    const uid = User?.uid;
+    const ref = firebase
+      .storage()
+      .ref("/User/" + uid)
+      .child("dp.jpg");
+    const uploadTask = ref.put(blob);
+
+    uploadTask.on(
+      "state_changed",
+      (snapshot) => {
+        var progress = snapshot.bytesTransferred / snapshot.totalBytes;
+        // this.setState({ progress: progress });
+        console.log("Upload is " + progress + "% done");
+      },
+      function (error) {
+        setLoading(false);
+        alert(error.message);
+      },
+      () => {
+        uploadTask.snapshot.ref.getDownloadURL().then((downloadURL) => {
+          console.log("File available at", downloadURL);
+          setImage(downloadURL);
+          dbRef
+            .ref("/User/" + User?.uid + "/")
+            .update({ photoUrl: downloadURL })
+            .then(() => {
+              setLoading(false);
+              return;
+            })
+            .catch((error) => {
+              alert(error.message);
+              setLoading(false);
+              return;
+            });
+        });
+      }
+    );
+  };
+  const uploadCoverImageAsync = async (coverImg: string) => {
+    setLoading(true);
+    const blob: Blob = await new Promise((resolve, reject) => {
+      const xhr = new XMLHttpRequest();
+      xhr.onload = function () {
+        resolve(xhr.response);
+      };
+      xhr.onerror = function (e) {
+        console.log(e);
+        reject(new TypeError("Network request failed"));
+        setLoading(false);
+        props.navigation.pop();
+      };
+      xhr.responseType = "blob";
+      xhr.open("GET", coverImg, true);
+      xhr.send(null);
+    });
+    const uid = User?.uid;
+    const ref = firebase
+      .storage()
+      .ref("/User/" + uid)
+      .child("cover.jpg");
+    const uploadTask = ref.put(blob);
+
+    uploadTask.on(
+      "state_changed",
+      (snapshot) => {
+        var progress = snapshot.bytesTransferred / snapshot.totalBytes;
+        console.log("Upload is " + progress + "% done");
+      },
+      function (error) {
+        setLoading(false);
+        alert(error.message);
+      },
+      () => {
+        uploadTask.snapshot.ref.getDownloadURL().then((downloadURL) => {
+          console.log("File available at", downloadURL);
+          setCoverImage(downloadURL);
+          dbRef
+            .ref("/User/" + User?.uid + "/")
+            .update({ coverPhotoUrl: downloadURL })
+            .then(() => {
+              setLoading(false);
+              return;
+            })
+            .catch((error) => {
+              alert(error.message);
+              setLoading(false);
+              return;
+            });
+        });
+      }
+    );
+  };
+  if (isLoading) {
+    return <Loading />;
+  }
   return (
     <Container>
       <Content>
         <Grid>
-          <Row style={{ height: Layout.window.height * 0.3, }}>
-
-            <ImageBackground source={image} style={styles.image}>
-              <Avatar rounded size='xlarge' containerStyle={{ marginTop: 60, borderWidth: 4, borderColor: Color.WHITE }} source={{ uri: "https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcQl2fWPROdS8pukewyAzcDzsD_ffortpxCXeg&usqp=CAU" }} />
-
+          <Row style={{ height: Layout.window.height * 0.3 }}>
+            <ImageBackground source={{ uri: coverImage }} style={styles.image}>
+              <Avatar
+                rounded
+                title={user.fname?.charAt(0)}
+                size="xlarge"
+                showAccessory
+                onAccessoryPress={() => _pickImage()}
+                containerStyle={{
+                  top: 50,
+                  borderWidth: 4,
+                  borderColor: Color.WHITE,
+                  position: "absolute",
+                  zIndex: 1,
+                }}
+                source={{
+                  uri: image,
+                }}
+              />
+              <View
+                style={{
+                  width: Layout.window.width,
+                  backgroundColor: Color.TRANSPARENT,
+                  height: Layout.window.height * 0.3,
+                  justifyContent: "flex-end",
+                  alignItems: "flex-end",
+                }}
+              >
+                <Button
+                  light
+                  onPress={() => _pickCoverImage()}
+                  style={{
+                    alignItems: "center",
+                    justifyContent: "center",
+                    borderRadius: 50,
+                    height: 50,
+                    margin: 10,
+                  }}
+                >
+                  <Icon
+                    name="md-camera"
+                    type="Ionicons"
+                    style={{ color: Color.WHITE }}
+                  />
+                </Button>
+              </View>
             </ImageBackground>
           </Row>
-          <Row style={{ height: Layout.window.height * 0.05, flex: 1, justifyContent: "center" }}>
-            <Text style={{ fontSize: 25, fontWeight: 'bold' }}>Nuwan Danushka</Text>
-
+          <Row
+            style={{
+              height: Layout.window.height * 0.05,
+              flex: 1,
+              justifyContent: "center",
+              marginTop: 45,
+              marginBottom: 10,
+              flexDirection: "column",
+              alignItems: "center",
+            }}
+          >
+            <Text style={{ fontSize: 25, fontWeight: "bold" }}>
+              {user.fname} {user.lname}
+            </Text>
           </Row>
-          <Row style={{ height: Layout.window.height * 0.05, flex: 1, justifyContent: "center" }}>
-            <Text note>Freelance Developer</Text>
-          </Row>
-          <Row style={{ height: Layout.window.height * 0.4 }}>
+          <Row style={{ height: Layout.window.height * 0.05 }}>
             <List>
-              <ListItem icon noBorder style={{ width: Layout.window.width }} noIndent>
-                <Left>
-                  <Icon active style={{ color: Color.GRAY }} name="ios-person" />
-                </Left>
-                <Body>
-                  <Text style={{ color: Color.BLACK }}>FirstName: Nuwan</Text>
-                </Body>
-              </ListItem>
-              <ListItem icon noBorder style={{ width: Layout.window.width }} noIndent>
-                <Left>
-                  <Icon active style={{ color: Color.GRAY }} name="ios-person" />
-                </Left>
-                <Body>
-                  <Text style={{ color: Color.BLACK }}>LastName: Danushka</Text>
-                </Body>
-              </ListItem>
-              <ListItem icon noBorder style={{ width: Layout.window.width }} noIndent>
+              <ListItem
+                icon
+                noBorder
+                style={{ width: Layout.window.height }}
+                noIndent
+              >
                 <Left>
                   <Icon active style={{ color: Color.GRAY }} name="ios-mail" />
                 </Left>
                 <Body>
-                  <Text style={{ color: Color.BLACK }}>Email: abc@gmail.com</Text>
+                  <Text style={{ color: Color.BLACK }}>{user.email}</Text>
                 </Body>
               </ListItem>
-              <ListItem icon noBorder style={{ width: Layout.window.width }} noIndent>
-                <Left>
-                  <Icon active style={{ color: Color.GRAY }} name="ios-call" />
-                </Left>
-                <Body>
-                  <Text style={{ color: Color.BLACK }}>PhoneNumber: +94779509290</Text>
-                </Body>
-              </ListItem>
-              <View>
-                <Button rounded style={{ marginHorizontal: 85, alignItems: 'center', justifyContent: 'center', borderColor: Color.BLACK, marginBottom: 20, marginTop: 65, backgroundColor:Color.BLACK }}onPress={() => firebase.auth().signOut()}>
-                  <Text>Log out</Text>
-                </Button>
-              </View>
             </List>
           </Row>
-          <Row style={{ height: Layout.window.height * 0.2 }} >
-
-          </Row>
-
-
-
         </Grid>
-
+        <View
+          style={{
+            flex: 1,
+            justifyContent: "center",
+            alignItems: "center",
+            height: Layout.window.height * 0.3,
+          }}
+        >
+          <Button
+            rounded
+            style={{ width: 200, justifyContent: "center", marginVertical: 10, backgroundColor: Color.BLACK }}
+            onPress={() => firebase.auth().signOut()}
+          >
+            <Text style={{ color: Color.WHITE }} >Logout</Text>
+          </Button>
+        </View>
       </Content>
-
     </Container>
   );
 };
@@ -100,7 +338,7 @@ const styles = StyleSheet.create({
   image: {
     flex: 1,
     resizeMode: "cover",
-    justifyContent: "center",
-    alignItems: 'center'
+    justifyContent: "flex-end",
+    alignItems: "center",
   },
 });
