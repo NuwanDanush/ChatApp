@@ -69,7 +69,13 @@ const TabTwoStack = createStackNavigator<TabTwoParamList>();
 function TabTwo() {
     return (
         <TabTwoStack.Navigator>
-            <TabTwoStack.Screen name='Profile' component={Profile} />
+            <TabTwoStack.Screen 
+            name='Profile' 
+            component={Profile}
+            options={{
+                title: 'Profile',
+                headerTitleContainerStyle: { alignItems: 'center', }
+            }} />
         </TabTwoStack.Navigator>
     );
 }
